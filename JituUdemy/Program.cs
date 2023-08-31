@@ -20,6 +20,8 @@ builder.Services.AddDbContext<JituUdemyDbContext>(options =>
 
 // Register services  --- Dependency Injection
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInstructorService, InstructorService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 //AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
