@@ -5,6 +5,7 @@ using JituUdemy.Response;
 using JituUdemy.Services.IServiecs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace JituUdemy.Controllers
 {
@@ -14,6 +15,7 @@ namespace JituUdemy.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly IMapper _mapper;
+        private const int MaxPageSize = 20;
 
         public CourseController(ICourseService service, IMapper mapper)
         {
@@ -38,12 +40,20 @@ namespace JituUdemy.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllCourses([FromQuery] string? name,  [FromQuery] string? instructor, [FromQuery] int price = 0)
+        public async Task<ActionResult<(IEnumerable<CourseResponse>, paginationMetaData)>> 
+            GetAllCourses([FromQuery] string? name,  [FromQuery] string? instructor, [FromQuery] int? price = 0, int pageSize = 1, int pageNumber=1)
         {
             //serach/ filter feature
+            if (pageSize > MaxPageSize) 
+            {
+                pageSize = MaxPageSize;
+            }
             if(price< 0){ price = 0;}
-            var response = await _courseService.GetAllCoursesAsync(name, price, instructor);
+            var (response, paginationMetaData) = await _courseService.GetAllCoursesAsync(name, price, instructor, pageSize, pageNumber);
             var courses = _mapper.Map<IEnumerable<CourseResponse>>(response);
+
+            //set it to the Headers (communicate data to frontend)
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(paginationMetaData));
             return Ok(courses);
         }
 

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SYkqsacrWPSXlvMWb+ujIjERREriBK1Cr4lrhUtGVmy1RVUqBh05HnsirQhN3jvLiazK8mHcooUCjXQ/UqA3og==",
+  "dgSpecHash": "WfKlHughuA8GC3H0XXkdlOU9yMevvBuwmllthWOWWtF0pMsWzoP9sTdJ4yT5RdEaaLeAcvxnv8/asFGUj2vyUg==",
   "success": true,
   "projectFilePath": "C:\\Projects\\c#\\JituUdemy\\JituUdemy\\JituUdemy.csproj",
   "expectedPackageFiles": [
@@ -47,6 +47,7 @@
     "C:\\Users\\brown\\.nuget\\packages\\microsoft.win32.registry\\5.0.0\\microsoft.win32.registry.5.0.0.nupkg.sha512",
     "C:\\Users\\brown\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\brown\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
+    "C:\\Users\\brown\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\brown\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
     "C:\\Users\\brown\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.4.0\\swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "C:\\Users\\brown\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.4.0\\swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",

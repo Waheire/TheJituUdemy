@@ -1,4 +1,5 @@
 ﻿using JituUdemy.Entities;
+using JituUdemy.Response;
 
 namespace JituUdemy.Services.IServiecs
 {
@@ -8,7 +9,8 @@ namespace JituUdemy.Services.IServiecs
         Task<string> DeleteCourseAsync(Course cousrse);
         Task<string> UpdateCourseAsync(Course course);
 
-        Task<IEnumerable<Course>> GetAllCoursesAsync(string? name, int price, string instructor);
+        Task<(IEnumerable<Course>, paginationMetaData)> 
+            GetAllCoursesAsync(string? name, int? price, string? instructor, int pageSize, int pageNumber);
         Task<Course> GetCourseByIdAsync(Guid courseId);
 
     }

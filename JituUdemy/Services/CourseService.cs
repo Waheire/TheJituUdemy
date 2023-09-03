@@ -1,5 +1,6 @@
 ﻿using JituUdemy.Data;
 using JituUdemy.Entities;
+using JituUdemy.Response;
 using JituUdemy.Services.IServiecs;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,13 +32,17 @@ namespace JituUdemy.Services
             return await _context.Courses.ToListAsync();
         }
 
-        public async Task<IEnumerable<Course>> GetAllCoursesAsync(string? name, int price, string instructor)
+        public async Task<(IEnumerable<Course>, paginationMetaData)> 
+            GetAllCoursesAsync(string? name, int? price, string? instructor, int pageSize, int pageNumber)
         {
-            var CourseList = await getAllCourses();
             if (string.IsNullOrWhiteSpace(name) && price == 0 && string.IsNullOrWhiteSpace(instructor)) 
             {
                 //no serach string or filter
-                return CourseList;
+                var CourseList = await getAllCourses();
+                var count = CourseList.Count();
+                CourseList = CourseList.Skip(pageSize *(pageNumber-1)).Take(pageSize);
+                var paginationMetaData = new paginationMetaData(pageSize, pageNumber, count);
+                return (CourseList, paginationMetaData);
             }
 
             //Deferred execution
@@ -53,12 +58,19 @@ namespace JituUdemy.Services
             }
             if (price > 0) 
             {
-                query = query.Where(c => c.Price < price);
+                query = query.Where(c => c.Price <= price);
             }
 
+            //sort the data
+            query = query.OrderBy(c => c.Price);
+            //get total number of rows
+            var filteredCount  = query.Count();
+            //pagination
+            query = query.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
+            var paginationMetaData1 = new paginationMetaData(pageSize, pageNumber, filteredCount);
             //execute it
-            return await query.ToListAsync();
-        }
+            return (await query.ToListAsync(), paginationMetaData1);
+        } 
 
         public async Task<Course> GetCourseByIdAsync(Guid courseId)
         {
