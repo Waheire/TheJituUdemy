@@ -77,5 +77,18 @@ namespace JituUdemy.Controllers
             var res = await _userService.DeleteUserAsync(response);
             return Ok(new UserSuccess(204, res));
         }
+
+        [HttpPut("BuyCourse")]
+        public async Task<ActionResult<UserSuccess>> BuyCourse(Guid id, BuyCourse buy)
+        {
+            try 
+            {
+                var res = await _userService.BuyCourse(buy);
+                return Ok(new UserSuccess(204, res));
+            } catch (Exception ex) 
+            {
+                return BadRequest(new UserSuccess(400, ex.Message));
+            }
+        }
     }
 }

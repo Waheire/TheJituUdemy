@@ -1,5 +1,6 @@
 ﻿using JituUdemy.Data;
 using JituUdemy.Entities;
+using JituUdemy.Response;
 using JituUdemy.Services.IServiecs;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,14 +27,48 @@ namespace JituUdemy.Services
             return "Instructor Deleted successfully";
         }
 
-        public async Task<IEnumerable<Instructor>> GetAllInstructorsAsync()
+        public async Task<IEnumerable<InstructorCoursesDto>> GetAllInstructorsAsync()
         {
-           return await _context.Instructors.ToListAsync();
+            return await _context.Instructors
+                .Select(i => new InstructorCoursesDto()
+            {
+                InstructorId = i.InstructorId,
+                Name = i.Name,
+                Email = i.Email,
+                Courses = i.Courses.Select(c => new CourseDto()
+                {
+                    CourseId = c.CourseId,
+                    Name = c.Name,
+                    Description = c.Description,
+                    Price = c.Price,
+                    PurchasedCount = c.Users.Count()
+                }).ToList(),
+            }).ToListAsync();
         }
 
         public async Task<Instructor> GetInstructorByIdAsync(Guid id)
         {
             return await _context.Instructors.Where(x => x.InstructorId == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<InstructorCoursesDto> GetUserandCoursesIdAsync(Guid userId)
+        {
+             return await _context.Instructors.
+             Where(x => x.InstructorId == userId).
+             Select(i => new InstructorCoursesDto()
+             {
+                 InstructorId = i.InstructorId,
+                 Name = i.Name,
+                 Email = i.Email,
+                 Courses = i.Courses.Select(c => new CourseDto()
+                 {
+                     CourseId = c.CourseId,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Price = c.Price,
+                     PurchasedCount = c.Users.Count()
+                 }).ToList(),
+             }).FirstOrDefaultAsync();
         }
 
         public async Task<string> UpdateInstructorAsync(Instructor instructor)

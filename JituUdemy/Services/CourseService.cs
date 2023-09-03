@@ -26,9 +26,38 @@ namespace JituUdemy.Services
             return "Courses Deleted successfully";
         }
 
-        public async Task<IEnumerable<Course>> GetAllCoursesAsync()
+        private async Task<IEnumerable<Course>> getAllCourses()
         {
             return await _context.Courses.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Course>> GetAllCoursesAsync(string? name, int price, string instructor)
+        {
+            var CourseList = await getAllCourses();
+            if (string.IsNullOrWhiteSpace(name) && price == 0 && string.IsNullOrWhiteSpace(instructor)) 
+            {
+                //no serach string or filter
+                return CourseList;
+            }
+
+            //Deferred execution
+            //build up the query
+            var query = _context.Courses.AsQueryable<Course>();
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                query = query.Where(c => c.Name.ToLower().Contains(name.ToLower()) || c.Description.ToLower().Contains(name.ToLower()));
+            }
+            if (!string.IsNullOrWhiteSpace(instructor))
+            {
+                query = query.Where(c => c.Instructor.Name.ToLower().Contains(instructor.ToLower()));
+            }
+            if (price > 0) 
+            {
+                query = query.Where(c => c.Price < price);
+            }
+
+            //execute it
+            return await query.ToListAsync();
         }
 
         public async Task<Course> GetCourseByIdAsync(Guid courseId)

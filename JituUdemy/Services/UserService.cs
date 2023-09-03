@@ -21,9 +21,19 @@ namespace JituUdemy.Services
             return "User Created successfully";
         }
 
-        public Task<string> BuyCourse(BuyCourse buyCourse)
+        public async Task<string> BuyCourse(BuyCourse buyCourse)
         {
-            throw new NotImplementedException();
+            var user = await _context.Users.Where(x => x.Id == buyCourse.UserId).FirstOrDefaultAsync();
+            var course = await  _context.Courses.Where(x=> x.CourseId == buyCourse.CourseId).FirstOrDefaultAsync();
+            if (user != null && course != null) 
+            {
+                //add course or user
+                user.Courses.Add(course);
+                await _context.SaveChangesAsync();
+                return "Course Purchased Successfully";
+            }
+            throw new Exception("Invalid Id's");
+
         }
 
         public async Task<string> DeleteUserAsync(User user)

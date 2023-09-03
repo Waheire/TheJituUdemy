@@ -33,27 +33,25 @@ namespace JituUdemy.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserResponse>>> GetAllInstructors() 
+        public async Task<ActionResult<IEnumerable<InstructorCoursesDto>>> GetAllInstructors() 
         {
-            var response = await _instructorService.GetAllInstructorsAsync();
-            var instructors = _mapper.Map<IEnumerable<UserResponse>>(response);
+            var instructors = await _instructorService.GetAllInstructorsAsync();
             return Ok(instructors);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserResponse>> GetInstructor(Guid id)
+        public async Task<ActionResult<InstructorCoursesDto>> GetInstructor(Guid id)
         {
-            var response = await _instructorService.GetInstructorByIdAsync(id);
-            if (response == null) 
+            var instructor = await _instructorService.GetUserandCoursesIdAsync(id);
+            if (instructor == null) 
             {
                 return NotFound(new UserSuccess(404, "Instructor not Found"));
             }
-            var instructor = _mapper.Map<UserResponse>(response);
             return Ok(instructor);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserResponse>> UpdateInstructor(Guid id, AddUser updatedInstructor)
+        public async Task<ActionResult<InstructorResponse>> UpdateInstructor(Guid id, AddUser updatedInstructor)
         {
             var response = await _instructorService.GetInstructorByIdAsync(id);
             if (response == null)
@@ -67,7 +65,7 @@ namespace JituUdemy.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<UserResponse>> DeleteInstructor(Guid id)
+        public async Task<ActionResult<InstructorResponse>> DeleteInstructor(Guid id)
         {
             var response = await _instructorService.GetInstructorByIdAsync(id);
             if (response == null)

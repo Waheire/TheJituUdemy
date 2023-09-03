@@ -8,7 +8,7 @@ namespace JituUdemy.Services.IServiecs
         Task<string> DeleteCourseAsync(Course cousrse);
         Task<string> UpdateCourseAsync(Course course);
 
-        Task<IEnumerable<Course>> GetAllCoursesAsync();
+        Task<IEnumerable<Course>> GetAllCoursesAsync(string? name, int price, string instructor);
         Task<Course> GetCourseByIdAsync(Guid courseId);
 
     }

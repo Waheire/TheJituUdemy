@@ -24,13 +24,13 @@ namespace JituUdemy.Controllers
         [HttpPost]
         public async Task<ActionResult<UserSuccess>> AddCourse(AddCourse newCourse)
         {
-            try 
+            try
             {
                 var course = _mapper.Map<Course>(newCourse);
                 var res = await _courseService.AddCourseAsync(course);
                 return CreatedAtAction(nameof(AddCourse), new UserSuccess(201, res));
 
-            } catch(Exception ex) 
+            } catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -38,9 +38,11 @@ namespace JituUdemy.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllCourses()
+        public async Task<ActionResult<IEnumerable<CourseResponse>>> GetAllCourses([FromQuery] string? name,  [FromQuery] string? instructor, [FromQuery] int price = 0)
         {
-            var response = await _courseService.GetAllCoursesAsync();
+            //serach/ filter feature
+            if(price< 0){ price = 0;}
+            var response = await _courseService.GetAllCoursesAsync(name, price, instructor);
             var courses = _mapper.Map<IEnumerable<CourseResponse>>(response);
             return Ok(courses);
         }
